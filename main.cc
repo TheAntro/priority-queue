@@ -1,14 +1,16 @@
 /* Created by Valtteri Ranta, GitHub: waltherbeach on 5th of June 2018
  * Will implement a priority queue using a vector, a linked list, a chunklist, and a heap
- * Will also facilitate performance measurements for the implementations
+ * Will not facilitate performance measurements for the implementations
  */
 
+#include "pqueuetest.hh"
 #include <iostream>
-
-using namespace std;
 
 int main()
 {
-    cout << "Hello World!" << endl;
+    BasicPQueueTest();
+    MorePQueueTest();
+    PQueueSortTest();
+    std::cout << "Thanks and have a nice day!" << std::endl;
     return 0;
 }
