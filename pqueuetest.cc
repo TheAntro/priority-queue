@@ -51,7 +51,6 @@ void BasicPQueueTest()
     pq.printDebuggingInfo();
 
     std::cout << std::endl << "Hit return to continue: ";
-    std::cin;
 }
 
 
@@ -92,10 +91,9 @@ void MorePQueueTest()
     std::cout << std::endl << "This next test raises an error if your pqueue is working correctly." << std::endl;
     std::cout << "Once you verify the test, comment it out to move on to the other tests." << std::endl;
     std::cout << "(Comment out line " << __LINE__ + 1 << " in the file " << __FILE__ << ")." << std::endl;
-    //std::cout << "Dequeue from empty pqueue returns " << pq.dequeueMax() << std::endl;
+    std::cout << "Dequeue from empty pqueue returns " << pq.dequeueMax() << std::endl;
 
     std::cout << std::endl << "Hit return to continue: ";
-    std::cin;
 }
 
 
@@ -130,7 +128,6 @@ void PQueueSortTest()
         ArrayIsSorted(array, SortSize) << std::endl;
 
     std::cout << std::endl << "Hit return to continue: ";
-    std::cin;
 }
 
 /*

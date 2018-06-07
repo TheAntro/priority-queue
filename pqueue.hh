@@ -69,8 +69,15 @@ public:
    void printDebuggingInfo();
 
 private:
+   // linked list priority queue private section
+   struct Cell {
+     int value;
+     Cell *next;
+  };
+  Cell *head;
+    // vector priority queue private section
+   //std::vector<int> entries;
 
-   std::vector<int> entries;
 };
 
 #endif // PQUEUE_HH

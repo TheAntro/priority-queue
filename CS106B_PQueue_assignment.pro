@@ -4,9 +4,9 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cc \
-    pqvector.cc \
     pqueuetest.cc \
-    random.cc
+    random.cc \
+    pqlist.cc
 
 HEADERS += \
     pqueue.hh \
