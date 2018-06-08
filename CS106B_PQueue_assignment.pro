@@ -6,7 +6,7 @@ CONFIG -= qt
 SOURCES += main.cc \
     pqueuetest.cc \
     random.cc \
-    pqlist.cc
+    pqchunklist.cc
 
 HEADERS += \
     pqueue.hh \
