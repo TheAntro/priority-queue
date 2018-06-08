@@ -69,12 +69,23 @@ public:
    void printDebuggingInfo();
 
 private:
-   // linked list priority queue private section
+   //unrolled linked list priority queue private section
+   const int MaxBlockSize = 4;
    struct Cell {
+     int *values;
+     int used;
+     Cell *next;
+  };
+  Cell *head;
+
+   // linked list priority queue private section
+  /*
+  struct Cell {
      int value;
      Cell *next;
   };
   Cell *head;
+  */
     // vector priority queue private section
    //std::vector<int> entries;
 

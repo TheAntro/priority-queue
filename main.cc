@@ -8,9 +8,19 @@
 
 int main()
 {
+    PQueue pq;
+    pq.enqueue(1);
+    pq.enqueue(5);
+    pq.enqueue(3);
+    pq.enqueue(6);
+    for (int i = 0; i < 4; i++) {
+        std::cout << pq.dequeueMax() << std::endl;
+    }
+    /*
     BasicPQueueTest();
     MorePQueueTest();
     PQueueSortTest();
     std::cout << "Thanks and have a nice day!" << std::endl;
+    */
     return 0;
 }

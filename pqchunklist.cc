@@ -32,17 +32,41 @@ int PQueue::size() {
     return count;
 }
 
+//TODO: Plenty of cleanup, possibly split into smaller functions
 void PQueue::enqueue(int newElem) {
     Cell *cur, *prev, *newCell = new Cell;
     for (cur = head, prev = NULL; cur != NULL; prev = cur, cur = cur->next) {
-        if (newElem > cur->value) break;
+        if (newElem > cur->values[0]) break;
     }
-    newCell->value = newElem;
-    newCell->next = cur;
-    if (prev) {
-        prev->next = newCell;
-    } else {
+    // In case the list is empty, or the value is larger than previous max
+    if (prev == NULL) {
+        newCell->values = new int[MaxBlockSize];
+        newCell->values[0] = newElem;
+        newCell->used = 1;
+
+        // If the list is empty, the newcell is also the last, thus next is NULL
+        if (head == NULL) {
+            newCell->next = NULL;
+        // Else, there is already a first Cell, so set next to its next
+        } else {
+            newCell->next = head;
+        }
         head = newCell;
+
+    // In other cases, insertion into the array of a previous cell
+        //TODO: Splitting cells when array is full
+    } else {
+        int index = 0;
+        for (index; index < prev->used; index++) {
+            if (newElem > prev->values[index]) {
+                break;
+            }
+        }
+        for (int j = prev->used; j > index; j--) {
+            prev->values[j] = prev->values[j-1];
+        }
+        prev->values[index] = newElem;
+        prev->used++;
     }
 }
 
@@ -51,10 +75,18 @@ int PQueue::dequeueMax() {
         std::cout << "Tried to dequeue from an empty queue!" << std::endl;
         return -1;
     }
-    int max = head->value;
-    Cell *toBeDeleted = head;
-    head = head->next;
-    delete toBeDeleted;
+    int max = head->values[0];
+    head->used--;
+    // In case of the dequeue emptying a cell
+    if (head->used == 0) {
+        Cell *old = head;
+        head = head->next;
+        delete old;
+    } else {
+        for (int i = 0; i < head->used; i++) {
+            head->values[i] = head->values[i+1];
+        }
+    }
     return max;
 }
 
@@ -90,7 +122,7 @@ void PQueue::printDebuggingInfo()
 
     std::cout << "------------------ START DEBUG INFO ------------------" << std::endl;
     for (Cell *cur = head; cur != NULL; cur = cur->next) {
-       std::cout << "Cell #" << count << " (at address " << cur << ") val = " << cur->value
+       std::cout << "Cell #" << count << " (at address " << cur << ") val = " << cur->values[0]
              << " next = " << cur->next << std::endl;
        count++;
     }
