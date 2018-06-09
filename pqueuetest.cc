@@ -71,10 +71,12 @@ void MorePQueueTest()
     std::cout << std::endl << "Enqueuing integers from 15 downto 1 (decreasing order)" << std::endl;
     for (int i = 15; i > 0; i--)
         pq.enqueue(i);
+    pq.printDebuggingInfo();
 
     std::cout << "Enqueuing duplicates for even numbers 2 to 14" << std::endl;
     for (int j = 2; j <= 14; j += 2)
         pq.enqueue(j);
+    pq.printDebuggingInfo();
 
     std::cout << "Dequeuing the top 10 elements: ";
     for (int k = 0; k < 10; k++)
