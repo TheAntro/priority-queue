@@ -78,6 +78,14 @@ private:
   };
   Cell *head;
 
+  void insertToNewCellAtHead(int newElem);
+  void insertToPreviousCell(int newElem, Cell *prev);
+  void insertToCellArray(int newElem, Cell *cell);
+  void allocateSplitCell(Cell *original, Cell *splitted);
+
+  std::string printCellValues(Cell *cell);
+
+
    // linked list priority queue private section
   /*
   struct Cell {

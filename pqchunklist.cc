@@ -6,6 +6,7 @@
 
 #include "pqueue.hh"
 #include <iostream>
+#include <sstream>
 
 //A new queue is empty, and with no Cells, the head points to NULL
 PQueue::PQueue() {
@@ -32,42 +33,75 @@ int PQueue::size() {
     return count;
 }
 
-//TODO: Plenty of cleanup, possibly split into smaller functions
+
 void PQueue::enqueue(int newElem) {
-    Cell *cur, *prev, *newCell = new Cell;
+    Cell *cur, *prev = new Cell;
     for (cur = head, prev = NULL; cur != NULL; prev = cur, cur = cur->next) {
         if (newElem > cur->values[0]) break;
     }
-    // In case the list is empty, or the value is larger than previous max
+    // If prev points to NULL, list is either empty or new value is new max
     if (prev == NULL) {
-        newCell->values = new int[MaxBlockSize];
-        newCell->values[0] = newElem;
-        newCell->used = 1;
-
-        // If the list is empty, the newcell is also the last, thus next is NULL
-        if (head == NULL) {
-            newCell->next = NULL;
-        // Else, there is already a first Cell, so set next to its next
-        } else {
-            newCell->next = head;
-        }
-        head = newCell;
-
-    // In other cases, insertion into the array of a previous cell
-        //TODO: Splitting cells when array is full
+        insertToNewCellAtHead(newElem);
     } else {
-        int index = 0;
-        for (index; index < prev->used; index++) {
-            if (newElem > prev->values[index]) {
-                break;
-            }
-        }
-        for (int j = prev->used; j > index; j--) {
-            prev->values[j] = prev->values[j-1];
-        }
-        prev->values[index] = newElem;
-        prev->used++;
+        insertToPreviousCell(newElem, prev);
     }
+}
+
+void PQueue::insertToNewCellAtHead(int newElem) {
+    Cell *newCell = new Cell;
+    newCell->values = new int[MaxBlockSize];
+    newCell->values[0] = newElem;
+    newCell->used = 1;
+
+    // If the list is empty, the newcell is also the last, thus next is NULL
+    if (head == NULL) {
+        newCell->next = NULL;
+    } else {
+        newCell->next = head;
+    }
+    head = newCell;
+}
+
+void PQueue::insertToPreviousCell(int newElem, Cell *prev) {
+    if (prev->used == MaxBlockSize) {
+        Cell *splitCell = new Cell;
+        splitCell->values = new int[MaxBlockSize];
+        allocateSplitCell(prev, splitCell);
+        // Splice the new cell in
+        splitCell->next = prev->next;
+        prev->next = splitCell;
+        if (newElem <= splitCell->values[0]) {
+            insertToCellArray(newElem, splitCell);
+        } else {
+            insertToCellArray(newElem, prev);
+        }
+    } else {
+        insertToCellArray(newElem, prev);
+    }
+}
+
+void PQueue::allocateSplitCell(Cell *original, Cell *splitted) {
+    int pasteIndex = 0;
+    int copyIndex = MaxBlockSize/2;
+    while (copyIndex < MaxBlockSize) {
+        splitted->values[pasteIndex++] = original->values[copyIndex++];
+        original->used--;
+        splitted->used++;
+    }
+}
+
+void PQueue::insertToCellArray(int newElem, Cell *cell) {
+    int index = 0;
+    for (index; index < cell->used; index++) {
+        if (newElem > cell->values[index]) {
+            break;
+        }
+    }
+    for (int j = cell->used; j > index; j--) {
+        cell->values[j] = cell->values[j-1];
+    }
+    cell->values[index] = newElem;
+    cell->used++;
 }
 
 int PQueue::dequeueMax() {
@@ -106,7 +140,7 @@ int PQueue::bytesUsed()
 
 std::string PQueue::implementationName()
 {
-    return "sorted linked list";
+    return "sorted unrolled linked list";
 }
 
 /*
@@ -119,12 +153,22 @@ std::string PQueue::implementationName()
 void PQueue::printDebuggingInfo()
 {
    int count = 0;
-
     std::cout << "------------------ START DEBUG INFO ------------------" << std::endl;
     for (Cell *cur = head; cur != NULL; cur = cur->next) {
-       std::cout << "Cell #" << count << " (at address " << cur << ") val = " << cur->values[0]
+       std::cout << "Cell #" << count << " (at address " << cur << ") val = " << printCellValues(cur)
              << " next = " << cur->next << std::endl;
        count++;
     }
     std::cout << "------------------ END DEBUG INFO ------------------" << std::endl;
+}
+
+std::string PQueue::printCellValues(Cell *cell) {
+    std::stringstream values;
+    values << "[ ";
+    for (int i = 0; i < cell->used; i++) {
+        values << cell->values[i] << " ";
+    }
+    values << "]";
+    std::string arrayprint = values.str();
+    return arrayprint;
 }
