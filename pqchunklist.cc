@@ -45,6 +45,10 @@ void PQueue::enqueue(int newElem) {
     } else {
         insertToPreviousCell(newElem, prev);
     }
+    //TODO: Add merging cells so that, e.g. adding values from 1 to 10 does not result in
+    //A chunklist with 10 Cells (Inefficient, as it is holding an array of 4 for each value
+    // Traditional unrolled list method: after enqueue at head, check if the next cell holds more than one value
+    // And transfer so that the newCell is half full. If the next cell empties, splice it off and delete it.
 }
 
 void PQueue::insertToNewCellAtHead(int newElem) {
@@ -111,7 +115,7 @@ int PQueue::dequeueMax() {
     }
     int max = head->values[0];
     head->used--;
-    // In case of the dequeue emptying a cell
+    // In case of the dequeue emptying a cell, splice the cell off
     if (head->used == 0) {
         Cell *old = head;
         head = head->next;
