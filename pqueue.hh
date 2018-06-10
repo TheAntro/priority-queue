@@ -69,7 +69,21 @@ public:
    void printDebuggingInfo();
 
 private:
+   //heap priority queue private section
+   const int InitialArraySize = 10;
+   int *heap;
+   int allocated;
+   int used;
+
+   void insertToHeap(int node, int newElem);
+   void maxHeapify(int node);
+
+   void swap(int source, int destination);
+   void doubleCapacity();
+
+
    //unrolled linked list priority queue private section
+   /*
    const int MaxBlockSize = 4;
    struct Cell {
      int *values;
@@ -85,7 +99,7 @@ private:
   void allocateSplitCell(Cell *original, Cell *splitted);
 
   std::string printCellValues(Cell *cell);
-
+  */
 
    // linked list priority queue private section
   /*
